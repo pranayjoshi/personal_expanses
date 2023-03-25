@@ -90,9 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final PreferredSizeWidget appBar = Platform.isIOS
         ? CupertinoNavigationBar(
             middle: Text("Expenses"),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
+            trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
               GestureDetector(
                 onTap: () => _startAddNewTransaction(context),
                 child: Icon(CupertinoIcons.add),
@@ -127,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Show Chart"),
+                        Text("Show Chart", style: Theme.of(context).textTheme.titleLarge,),
                         Switch.adaptive(
                             value: _ShowChart,
                             onChanged: (val) {
