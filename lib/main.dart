@@ -2,6 +2,7 @@
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:personal_expenses/widgets/chart.dart';
 import 'package:personal_expenses/widgets/new_transaction.dart';
 import 'package:personal_expenses/widgets/transaction_list.dart';
@@ -10,6 +11,8 @@ import 'widgets/transaction_list.dart';
 import 'models/transaction.dart';
 
 void main() {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(const MyApp());
 }
 
@@ -51,6 +54,8 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
+  bool _ShowChart = false;
+
   void _startAddNewTransaction(BuildContext ctx){
     showModalBottomSheet(context: ctx, builder: (bCtx){return GestureDetector(onTap: () {}, child: NewTransaction(_addUserTransaction), behavior: HitTestBehavior.opaque,);});
   }
@@ -75,12 +80,18 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    final _isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+
     final appBar = AppBar(
         title: Text("Personal Expenses"),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.add, color: Colors.white), onPressed: (){_startAddNewTransaction(context);})
         ],
       );
+    final txList = Container(
+                height: (MediaQuery.of(context).size.height - appBar.preferredSize.height - MediaQuery.of(context).padding.top) * 0.7,
+                child: TransactionList(_userTransactions, _deleteUserTransaction));
     return Scaffold(
       appBar: appBar,
       body: SingleChildScrollView(
@@ -88,13 +99,26 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
                 Widget>[
-              Container(
+
+            if (_isLandscape) Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Text("Show Chart"),
+                Switch(value: _ShowChart, onChanged: (val) {
+                  setState(() {
+                    _ShowChart = val;
+                  });
+                })
+              ],),
+
+              if (!_isLandscape)
+                Container(
                 height: (MediaQuery.of(context).size.height - appBar.preferredSize.height - MediaQuery.of(context).padding.top) * 0.3,
                 child: Chart(_recentTransactions)),
-              Container(
+              if (!_isLandscape) txList
+              else _ShowChart ? Container(
                 height: (MediaQuery.of(context).size.height - appBar.preferredSize.height - MediaQuery.of(context).padding.top) * 0.7,
-                child: TransactionList(_userTransactions, _deleteUserTransaction))
+                child: Chart(_recentTransactions)) : txList,
             ]),
+              
           ],
         ),
       ),
