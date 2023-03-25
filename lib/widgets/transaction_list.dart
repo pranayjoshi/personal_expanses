@@ -12,6 +12,15 @@ class TransactionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final delIcon = (index) => IconButton(icon: Icon(Icons.delete), onPressed: () { return deleteTx(transactions[index].id);}, color: Theme.of(context).colorScheme.error,);
+    final FlatIcon = (index) => ElevatedButton.icon(icon: Icon(Icons.delete), label: Text("Delete"), onPressed: () { return deleteTx(transactions[index].id);}, style: TextButton.styleFrom(
+
+        foregroundColor: Theme.of(context).colorScheme.error,
+        backgroundColor: Colors.white
+      ),);
+
+
     return  Container(
       padding: EdgeInsets.all(10),
       child: ListView.builder(
@@ -40,7 +49,7 @@ class TransactionList extends StatelessWidget {
                         DateFormat.yMMMMd('en_US').format(tx.date),
                         style: const TextStyle(color: Colors.grey),
                       ),
-                trailing: IconButton(icon: Icon(Icons.delete), onPressed: () { return deleteTx(transactions[index].id);}, color: Theme.of(context).colorScheme.error,),
+                trailing: MediaQuery.of(context).size.width > 360 ? FlatIcon(index) : delIcon(index),
               ),
             );
           },

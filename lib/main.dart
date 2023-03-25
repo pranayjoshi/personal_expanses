@@ -1,5 +1,5 @@
 // ignore_for_file: sort_child_properties_last, deprecated_member_use
-
+import 'dart:io';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -81,7 +81,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
 
-    final _isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+    final mediaQuery = MediaQuery.of(context);
+
+    final _isLandscape = mediaQuery.orientation == Orientation.landscape;
 
     final appBar = AppBar(
         title: Text("Personal Expenses"),
@@ -90,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       );
     final txList = Container(
-                height: (MediaQuery.of(context).size.height - appBar.preferredSize.height - MediaQuery.of(context).padding.top) * 0.7,
+                height: (mediaQuery.size.height - appBar.preferredSize.height - mediaQuery.padding.top) * 0.7,
                 child: TransactionList(_userTransactions, _deleteUserTransaction));
     return Scaffold(
       appBar: appBar,
@@ -102,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
             if (_isLandscape) Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Text("Show Chart"),
-                Switch(value: _ShowChart, onChanged: (val) {
+                Switch.adaptive(value: _ShowChart, onChanged: (val) {
                   setState(() {
                     _ShowChart = val;
                   });
@@ -111,11 +113,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
               if (!_isLandscape)
                 Container(
-                height: (MediaQuery.of(context).size.height - appBar.preferredSize.height - MediaQuery.of(context).padding.top) * 0.3,
+                height: (mediaQuery.size.height - appBar.preferredSize.height - mediaQuery.padding.top) * 0.3,
                 child: Chart(_recentTransactions)),
               if (!_isLandscape) txList
               else _ShowChart ? Container(
-                height: (MediaQuery.of(context).size.height - appBar.preferredSize.height - MediaQuery.of(context).padding.top) * 0.7,
+                height: (mediaQuery.size.height - appBar.preferredSize.height - mediaQuery.padding.top) * 0.7,
                 child: Chart(_recentTransactions)) : txList,
             ]),
               
@@ -123,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(onPressed: () => _startAddNewTransaction(context), child: const Icon(Icons.add, color: Colors.white,)),
+      floatingActionButton: Platform.isIOS ? Container() : FloatingActionButton(onPressed: () => _startAddNewTransaction(context), child: const Icon(Icons.add, color: Colors.white,)),
     );
   }
 }
