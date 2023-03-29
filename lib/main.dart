@@ -36,7 +36,7 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   final List<Transaction> _userTransactions = [
     Transaction(
         id: "t1", title: "New Shoes", amount: 99.99, date: DateTime.now()),
@@ -60,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
   }
 
   @override
-  void didChangeAppLifecycle(AppLifecycleState state){
+  void didChangeAppLifecycle(AppLifecycleState state) {
     print(state);
   }
 
@@ -101,35 +101,34 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
   }
 
   Widget _buildLandscapeContent() {
-    return 
-      Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Show Chart",
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        Switch.adaptive(
-                            value: _ShowChart,
-                            onChanged: (val) {
-                              setState(() {
-                                _ShowChart = val;
-                              });
-                            })
-                      ],
-                    );
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          "Show Chart",
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        Switch.adaptive(
+            value: _ShowChart,
+            onChanged: (val) {
+              setState(() {
+                _ShowChart = val;
+              });
+            })
+      ],
+    );
   }
 
   Widget _buildPotraitContent(mediaQuery, appBar) {
     return Container(
-                        height: (mediaQuery.size.height -
-                                appBar.preferredSize.height -
-                                mediaQuery.padding.top) *
-                            0.3,
-                        child: Chart(_recentTransactions));
+        height: (mediaQuery.size.height -
+                appBar.preferredSize.height -
+                mediaQuery.padding.top) *
+            0.3,
+        child: Chart(_recentTransactions));
   }
 
-  Widget _buildAppBar(){
+  Widget _buildAppBar() {
     return Platform.isIOS
         ? CupertinoNavigationBar(
             middle: Text("Expenses"),
@@ -174,9 +173,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   if (_isLandscape) _buildLandscapeContent(),
-                    
                   if (!_isLandscape) _buildPotraitContent(mediaQuery, appBar),
-                    
                   if (!_isLandscape)
                     txList
                   else
