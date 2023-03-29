@@ -110,13 +110,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: Chart(_recentTransactions));
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
-
-    final _isLandscape = mediaQuery.orientation == Orientation.landscape;
-
-    final PreferredSizeWidget appBar = Platform.isIOS
+  Widget _buildAppBar(){
+    return Platform.isIOS
         ? CupertinoNavigationBar(
             middle: Text("Expenses"),
             trailing: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
@@ -136,6 +131,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   })
             ],
           ) as PreferredSizeWidget;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+
+    final _isLandscape = mediaQuery.orientation == Orientation.landscape;
+
+    final PreferredSizeWidget appBar = _buildAppBar() as PreferredSizeWidget;
     final txList = Container(
         height: (mediaQuery.size.height -
                 appBar.preferredSize.height -
